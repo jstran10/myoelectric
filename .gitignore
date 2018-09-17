@@ -1,0 +1,13 @@
+# Caches
+__pychache__/
+.ipynb_checkpoints/
+
+# Images
+*.pdf
+*.png
+*.tif
+*.tiff
+*.jpeg
+
+# Pickle files
+*.pkl
