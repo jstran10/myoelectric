@@ -1,0 +1,17 @@
+pyserial
+myo-python
+
+scipy
+
+keras
+tensorflow
+
+matplotlib
+
+PyWavelets
+
+numpy
+
+scikit-learn
+
+jupyter
