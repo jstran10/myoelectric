@@ -8,6 +8,8 @@ __pycache__/
 *.tif
 *.tiff
 *.jpeg
+!model.png
 
 # Pickle files
 *.pkl
+*.hdf5

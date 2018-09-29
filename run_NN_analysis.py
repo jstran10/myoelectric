@@ -49,8 +49,8 @@ def main(batch_size=16):
 
     conf_matrix = find_confusion_matrix(model,
                                         [train_data_x[-test_length:],
-                                         train_data_x_rms[-test_length:]],
-                                         train_data_y[-test_length:])
+                                        train_data_x_rms[-test_length:]],
+                                        train_data_y[-test_length:])
 
     show_confusion_matrix(conf_matrix)
     show_learning(hist)
