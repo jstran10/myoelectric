@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov  5 20:31:13 2018
+
+@author: jason
+"""
+
 import keras
 from keras.models import Model
 from keras.layers import Input, Dense, Dropout, Flatten
@@ -8,8 +15,8 @@ from keras.layers import ReLU
 
 def define_NN_architecture():
     wavelet_inputs = Input(shape=(248, 16, 1), name='wavelet_input')
-
     rms_inputs = Input(shape=(16, ), name='rms_input')
+    emg_imputs = Input(shape=(200, 16, 1), name='emg_input')
     RMS_out = BatchNormalization(
                         momentum=0.99,
                         epsilon=0.001,
@@ -139,6 +146,6 @@ def define_NN_architecture():
                         activation='softmax'
                         )(x)
 
-    model = Model(inputs=[wavelet_inputs, rms_inputs],
+    model = Model(inputs=[wavelet_inputs, rms_inputs, emg_imputs],
                   outputs=predictions)
     return model

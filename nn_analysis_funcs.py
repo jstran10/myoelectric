@@ -19,6 +19,7 @@ def pre_process_data(nn_data):
 
     train_data_x_wavelet = []
     train_data_x_rms = []
+    train_data_x_emg=[]
     train_data_y = []
 
     rest_label = nn_data[0]['label']
@@ -34,11 +35,13 @@ def pre_process_data(nn_data):
             if (uniform(1, 16) > 15):
                 train_data_x_wavelet.append(trial['wavelet'])
                 train_data_x_rms.append(trial['rms'])
+                train_data_x_emg.append(trial['emg'])
                 train_data_y.append(label_append)
 
         else:
             train_data_x_wavelet.append(trial['wavelet'])
             train_data_x_rms.append(trial['rms'])
+            train_data_x_emg.append(trial['emg'])
             train_data_y.append(label_append)
 
     train_data_y = to_categorical(train_data_y, num_classes=18)
@@ -52,14 +55,20 @@ def pre_process_data(nn_data):
             (len(train_data_x_rms), 16)
             )
 
+    train_data_x_emg = np.reshape(
+            train_data_x_emg,
+            (len(train_data_x_emg), 200, 16, 1)
+            )
     rng_state = np.random.get_state()
     np.random.shuffle(train_data_y)
     np.random.set_state(rng_state)
     np.random.shuffle(train_data_x_wavelet)
     np.random.set_state(rng_state)
     np.random.shuffle(train_data_x_rms)
+    np.random.set_state(rng_state)
+    np.random.shuffle(train_data_x_emg)
 
-    return train_data_x_wavelet, train_data_x_rms, train_data_y
+    return train_data_x_wavelet, train_data_x_rms, train_data_x_emg, train_data_y
 
 
 def find_confusion_matrix(model, x_in, y_actual, categorical=True):
@@ -170,7 +179,7 @@ def show_learning(hist):
     plt.show()
 
 
-def generator(x1, x2, y1, batch_size, min_index, max_index):
+def generator(x1, x2, x3, y1, batch_size, min_index, max_index):
     import numpy as np
     if max_index is None:
         max_index = len(x1) - 1
@@ -186,11 +195,18 @@ def generator(x1, x2, y1, batch_size, min_index, max_index):
 
         samples = np.zeros((len(rows), 248, 16, 1))
         samples_rms = np.zeros((len(rows), 16))
+        samples_emg = np.zeros((len(rows), 200, 16, 1))
         targets = np.zeros((len(rows), 18))
 
         for j, row in enumerate(rows):
             samples[j] = x1[row]
             samples_rms[j] = x2[row]
+            samples_emg[j] = x3[row]
             targets[j] = y1[row]
 
-        yield ([samples, samples_rms], targets)
+        yield ([samples, samples_rms, samples_emg], targets)
+       # yield ([samples], targets)
+
+#data = {'emg':[1,2,3], 'rms':[1,2,3],'wavelet':[1,2,3],'label':5}
+#data['emg'] will get all of that
+#so now need to add        
